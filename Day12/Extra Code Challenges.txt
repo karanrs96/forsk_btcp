@@ -1,0 +1,14 @@
+SMS Sender
+
+Description: 
+Write a Python script to send SMS to a number entered by the user (validate the input) and also save number and text along with the time of message sent in a MongoDB Database(mlab cloud).
+
+API to be used for sending the SMS is:
+
+http://sms.dataoxytech.com/index.php/smsapi/httpapi/?uname=sylvester007&password=forskmnit&sender=FORSKT&receiver=9928492120&route=TA&msgtype=1&sms=Hello
+
+------------------------------------------
+Fortune Teller (Horoscope)
+
+Description: 
+A program that checks your horoscope on various astrology sites and puts them together for you each day. The code should share the Horoscope on Tweeter account of the user.

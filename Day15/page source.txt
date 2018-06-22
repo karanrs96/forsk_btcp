@@ -1,0 +1,3041 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<!--[if lte IE 9]><html class="ie ie9 lte9" lang="en"><![endif]-->
+<!--[if !IE]><!--><html lang="en"><!--<![endif]-->
+<head dir="ltr">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+  <title>
+
+ Sample Code: SVM (Support Vector Machines) | ST101 Courseware | Forsk Labs
+</title>
+
+      <script type="text/javascript">
+        /* immediately break out of an iframe if coming from the marketing website */
+        (function(window) {
+          if (window.location !== window.top.location) {
+            window.top.location = window.location;
+          }
+        })(this);
+      </script>
+
+  
+
+  <script type="text/javascript" src="/static/js/i18n/en/djangojs.b28203373cc1.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.418e1bd5801b.ico" />
+
+  
+  
+
+    <link href="/static/css/lms-style-vendor.e94b4f081f3a.css" rel="stylesheet" type="text/css" />
+
+
+
+  
+  
+
+    <link href="/static/css/lms-main-v1.70875d281f2f.css" rel="stylesheet" type="text/css" />
+
+
+
+
+    
+    <script type="text/javascript" src="/static/js/lms-main_vendor.b08456a95e51.js" charset="utf-8"></script>
+
+
+    
+    <script type="text/javascript" src="/static/js/lms-application.08b98ee0f748.js" charset="utf-8"></script>
+
+
+
+  <script>
+    window.baseUrl = "/static/";
+    (function (require) {
+      require.config({
+          baseUrl: window.baseUrl
+      });
+    }).call(this, require || RequireJS.require);
+  </script>
+  <script type="text/javascript" src="/static/lms/js/require-config.72018caf3bf2.js"></script>
+  
+    <script type="text/javascript">
+        (function (require) {
+          require.config({
+              paths: {
+                'draggabilly': 'js/vendor/draggabilly.26caba6f7187',
+'js/courseware/toggle_element_visibility': 'js/courseware/toggle_element_visibility.e564e0ed228c',
+'js/courseware/course_home_events': 'js/courseware/course_home_events.4e8915731e7d',
+'js/bookmarks/bookmarks_factory': 'js/bookmarks/bookmarks_factory.115f87d0dc9d',
+'edxicons': 'edx-pattern-library/js/edx-icons.a9ab01bc44bf',
+'moment': 'js/vendor/moment.min.fd3f9e552fe7',
+'js/student_profile/views/learner_profile_factory': 'js/student_profile/views/learner_profile_factory.833d2cd802df',
+'jquery.url': 'js/vendor/url.min.0098a9ff3d53',
+'js/student_account/logistration_factory': 'js/student_account/logistration_factory.58120d0d8087',
+'js/groups/views/cohorts_dashboard_factory': 'js/groups/views/cohorts_dashboard_factory.8b1d765eab68',
+'afontgarde': 'edx-pattern-library/js/afontgarde.f6413e623704',
+'js/bookmarks/views/bookmark_button': 'js/bookmarks/views/bookmark_button.f9d16d58a9d8',
+'js/views/message_banner': 'js/views/message_banner.13d853dc7834'
+            }
+          });
+        }).call(this, require || RequireJS.require);
+    </script>
+  
+
+    
+    <script type="text/javascript" src="/static/js/lms-modules.b9ddd6456d7d.js" charset="utf-8"></script>
+
+
+
+  
+
+  
+
+    <link href="/static/css/lms-style-course-vendor.d65f103108eb.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+
+    <link href="/static/css/lms-course.27433554ba3c.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/static/js/jquery.autocomplete.3bd10d7510d2.js"></script>
+<script type="text/javascript" src="/static/js/src/tooltip_manager.472e2d2e9b07.js"></script>
+
+
+    <script type="text/javascript" src="/static/js/discussion_vendor.639df35e4b19.js" charset="utf-8"></script>
+
+
+
+<link href="/static/css/vendor/jquery.autocomplete.09a0b34739a2.css" rel="stylesheet" type="text/css">
+
+  
+
+
+  
+
+  
+
+
+  
+
+
+<!-- dummy Segment -->
+<script type="text/javascript">
+  var analytics = {
+    track: function() { return; },
+    trackLink: function() { return; },
+    pageview: function() { return; },
+    page: function() { return; }
+  };
+</script>
+<!-- end dummy Segment -->
+
+
+  <meta name="path_prefix" content="">
+  <meta name="google-site-verification" content="_mipQ4AtZQDNmbtOkwehQDOgCxUUV2fb_C0b6wbiRHY" />
+
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '89406860']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-89444795-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="ltr view-in-course view-courseware courseware  lang_en">
+
+<div id="page-prompt"></div>
+  <div class="window-wrap" dir="ltr">
+    <a class="nav-skip" href="#content">Skip to main content</a>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+  <header id="global-navigation" class="global slim" >
+    <nav class="nav-wrapper" aria-label="Global">
+    <h1 class="logo">
+      <a href="/">
+        
+            <img src="/static/images/logo.b6c374d66d57.png" alt="Forsk Labs Home Page"/>
+        
+      </a>
+    </h1>
+
+    <h2 class="course-header"><span class="provider">Forsk_Labs:</span>
+      <span class="course-number">ST101</span>
+      
+      <span class="course-name">Data Science (Summer Trainings) 2018</span></h2>
+
+    <ol class="left nav-global authenticated">
+      
+          <li class="nav-global-01">
+            <a href="/courses">Find Courses</a>
+          </li>
+      
+    </ol>
+    <ol class="user">
+      <li class="primary">
+        <a href="/dashboard" class="user-link">
+          <span class="sr">Dashboard for:</span>
+          
+          <img class="user-image-frame" src="/static/images/profiles/default_50.3455a6581573.png" alt="Profile image for karan_raj_singh">
+          <div class="label-username">karan_raj_singh</div>
+        </a>
+      </li>
+      <li class="primary">
+        <button class="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr">More options dropdown</span><span class="fa fa-sort-desc" aria-hidden="true"></span></button>
+        <ul class="dropdown-menu" aria-label="More Options" role="menu">
+          
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/u/karan_raj_singh">Profile</a></li>
+            <li><a href="/account/settings">Account</a></li>
+          
+          <li><a href="/logout" role="menuitem">Sign Out</a></li>
+        </ul>
+      </li>
+    </ol>
+	  
+    </nav>
+</header>
+<!--[if lte IE 9]>
+<div class="ie-banner" aria-hidden="true">
+<strong>Warning:</strong> Your browser is not fully supported. We strongly recommend using <a href="https://www.google.com/chrome" target="_blank">Chrome</a> or <a href="http://www.mozilla.org/firefox" target="_blank">Firefox</a>.
+</div>
+<![endif]-->
+
+
+
+
+
+
+
+
+
+
+    <div role="main" class="content-wrapper" id="content" tabindex="-1">
+      
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/template" id="image-modal-tpl">
+    <div class="wrapper-modal wrapper-modal-image">
+  <section class="image-link">
+    <%= smallHTML%>
+    <a href="#" class="modal-ui-icon action-fullscreen" role="button">
+      <span class="label">
+        <i class="icon fa fa-arrows-alt fa-large"></i> <%= gettext("Fullscreen") %>
+      </span>
+    </a>
+  </section>
+
+  <section class="image-modal">
+    <section class="image-content">
+      <div class="image-wrapper">
+        <img alt="<%= largeALT %>, <%= gettext('Large') %>" src="<%= largeSRC %>" />
+      </div>
+
+      <a href="#" class="modal-ui-icon action-close" role="button">
+        <span class="label">
+          <i class="icon fa fa-remove fa-large"></i> <%= gettext("Close") %>
+        </span>
+      </a>
+
+      <ul class="image-controls">
+        <li class="image-control">
+          <a href="#" class="modal-ui-icon action-zoom-in" role="button">
+            <span class="label">
+              <i class="icon fa fa fa-search-plus fa-large"></i> <%= gettext("Zoom In") %>
+            </span>
+          </a>
+        </li>
+
+        <li class="image-control">
+          <a href="#" class="modal-ui-icon action-zoom-out is-disabled" aria-disabled="true" role="button">
+            <span class="label">
+              <i class="icon fa fa fa-search-minus fa-large"></i> <%= gettext("Zoom Out") %>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </section>
+</div>
+
+</script>
+
+
+
+
+
+
+
+
+
+<div class="message-banner" aria-live="polite"></div>
+
+  
+
+
+
+
+
+
+<nav class="courseware wrapper-course-material" aria-label="Course Material">
+  <div class="course-material">
+     
+      <ol class="course-tabs">
+      
+
+
+
+
+  
+  <li>
+  <a href="/courses/Forsk_Labs/ST101/2018_19/info" class="">
+  Home
+  </a>
+  </li>
+  
+  <li>
+  <a href="/courses/Forsk_Labs/ST101/2018_19/courseware" class="active">
+  Course
+      <span class="sr">, current location</span>
+  </a>
+  </li>
+  
+  <li>
+  <a href="/courses/Forsk_Labs/ST101/2018_19/discussion/forum" class="">
+  Discussion
+  </a>
+  </li>
+  
+  <li>
+  <a href="/courses/Forsk_Labs/ST101/2018_19/course_wiki" class="">
+  Wiki
+  </a>
+  </li>
+  
+  <li>
+  <a href="/courses/Forsk_Labs/ST101/2018_19/progress" class="">
+  Progress
+  </a>
+  </li>
+
+      
+      </ol>
+  </div>
+</nav>
+
+
+
+<div class="container">
+  <div class="course-wrapper" role="presentation">
+
+    <div class="course-index">
+
+      <div class="wrapper-course-modes">
+
+          <div class="courseware-bookmarks-button" data-bookmarks-api-url="/api/bookmarks/v1/bookmarks/">
+              <button type="button" class="bookmarks-list-button is-inactive" aria-pressed="false">
+                  Bookmarks
+              </button>
+          </div>
+
+
+      </div>
+
+      <div class="accordion">
+        <nav class="course-navigation" aria-label="Course">
+            
+
+
+
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-1-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-1-parent" aria-controls="python-and-software-engineering-best-practices-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-1-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b17757bddfc04b639b3d3a2f7f571b70/288e0bfce7a74f4f978abe2b07525a8c/">
+                <p>Introduction To Python </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b17757bddfc04b639b3d3a2f7f571b70/7bfc8f5890f3425f8097426eeb9eeae1/">
+                <p>Hands On 01 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-2-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-2-parent" aria-controls="python-and-software-engineering-best-practices-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-2-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/c404b6abe3004b77b7943888106d3e3f/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/17431a686a61460d9b87044ec7e45962/">
+                <p>Python Data Types </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/b5a91f3bc7be4129956f2b3a18f37319/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/45f4812015844733b17d0da31a8ed169/">
+                <p>Submission 01 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/60a6a6b48c504e3fa2debfb68c4a460b/">
+                <p>Submission 02 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/bf57e58812e74094bd017ecc56193eed/">
+                <p>Submission 03 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6f1941961f144cbb9b264c546e85ce4d/deaec129369241c6a5d93ce25336bd32/">
+                <p>Submission 04 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-3-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-3-parent" aria-controls="python-and-software-engineering-best-practices-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-3-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/503ef90ce60e41249964111fc824f433/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/1b6f23ada9c74bf4b408523bb2b4b365/">
+                <p>List, Tuples and Dictionaries </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/c8eb7d165843477699ee4cab017d8e5b/">
+                <p>Control Flow Statements </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/cf5cdcbf629d4491b4a7b52103f7e476/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/4da8ff24174f4493a9331ad08deec7b6/">
+                <p>Submission 05 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/959a1d332638471191b870e1b1e6b10a/">
+                <p>Submission 06 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/e7155b84a50e47078b89cc0298f65f53/">
+                <p>Submission 07 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/d5870342b7f1443bafb90f5dd096c930/">
+                <p>Submission 08 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/434c32d3ca8148588ede446c09960f40/">
+                <p>Submission 09 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/abd435c43a5c4220b689d7cdf2a5303f/4cad3c9182d64069b2058741a207e44d/">
+                <p>Submission 10 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-4-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-4-parent" aria-controls="python-and-software-engineering-best-practices-p-4-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-4)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-4)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-4-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-4) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/1607694ab74b40b1b43523828a911995/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/ace3329348c74142bb8374c0e668104d/">
+                <p>Functions/Procedures </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/239e1ca4cc514df6bf48caf2a7f21e3a/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/a1e1bb024f4641a8a695a7b3f25aee5a/">
+                <p>Submission 11 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/cf1eb8a7377a42e5acc69de1997f7663/">
+                <p>Submission 12 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/8d1c3366a03347398fe8255d7f7bceca/">
+                <p>Submission 13 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/eb56326981f44cc4bf5f7e6792c5848f/62945f321be944e9986d1524de3ff430/">
+                <p>Submission 14 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-5-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-5-parent" aria-controls="python-and-software-engineering-best-practices-p-5-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-5)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-5)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-5-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-5) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/93bf4c02f0794f85b87b0d3f42afc330/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/c54d6e49176142fab2b0369d3c3da5de/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/1e08198995c64c588fff981548a1a0c8/">
+                <p>File Handling </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/634bc02b94bb42848655f04cd7f7c663/">
+                <p>Standard/Built-in  Libraries </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/982c8e292f844346b5b07844ea2e04de/">
+                <p>Sample Code: PIL </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/8fec7807b15343d8b078df6327e60903/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/ce284a1e41be4c03a4babbc7a7301555/">
+                <p>Submission 15 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/4cb9c338803d48739c427bf2b726f3a6/">
+                <p>Submission 16 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b7b76e9361444caba0d1489f2aa472fa/e5560485a02e4eafbc884345ce6b9c82/">
+                <p>Submission 17 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-6-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-6-parent" aria-controls="python-and-software-engineering-best-practices-p-6-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-6)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-6)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-6-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-6) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/28f0b8d789584ef0916b8944e6ad23bf/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/624b08e56e60432582c9ea1c80e686e4/">
+                <p>Data Exchange Mechanisms </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/1ab8a13c7d4b48fca72f64908b5757ce/">
+                <p>Using OpenSource REST APIs </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/88e8a380704741d380d9dc1bcd97da0b/">
+                <p>Code: Using OpenSource REST APIs </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/1a5b315ed10b4b8cb8720ba8d4f9dd70/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/851872d5c9ba4459ac9809c358b7a453/">
+                <p>Submission 18 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/bb40cb5d626547d18b15f574a0b629bf/">
+                <p>Submission 19 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/a521bc44e5734095a240b5bb175e31f5/074405e223dd4f0ba690145522c6edd8/">
+                <p>Submission 20 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-7-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-7-parent" aria-controls="python-and-software-engineering-best-practices-p-7-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-7)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-7)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-7-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-7) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/48590207f7194b38ba01e73dfb29dde2/">
+                <p>Lambda, Filter, Map and Reduce </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/0ffc0cfff28647fd844bde1e8705cda3/">
+                <p>List Comprehension </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/8c4cddc0a5fd4ced8a95e6c7ef216dce/">
+                <p>App Creation on Twitter </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/737df82cde4740188896e4407c9cc2f7/">
+                <p>Code Challenge 1 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/922f10ce7f0c44bf89386f591413e717/">
+                <p>Code Challenge 2 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/f3f118de49634b149b94fdaf46ed0d7f/">
+                <p>Code Challenge 3 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/2e2ff94546d04a82b349d3cf5a6b2f69/">
+                <p>Code Challenge 4 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/1cb5691d66f64975a8177818caaf1889/">
+                <p>Submission 21 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/6009c1e94ff44f13bc1b495a5cfe82f6/">
+                <p>Submission 22 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/00d69b99a1cb41c0aa4ed4e47a21d476/">
+                <p>Submission 23 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/e5fb0ffc9b054a3eb225e79192a4b808/c60aec2e90274729841c926da837942d/">
+                <p>Submission 24 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-8-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-8-parent" aria-controls="python-and-software-engineering-best-practices-p-8-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-8)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-8)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-8-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-8) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/67a409bf3d9b4ea2a4b25d0b7e059995/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz due Sep 20, 2017 at 05:40 UTC</span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/f3a465d2c1874200a27ac462432d5a4f/">
+                <p>OrderdDict, NamedTuple, DefaultDict, Counter, Any and All </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/dfb4196ccb8540be9119abb6aa489758/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/af9885e85cd6421394282ce4db8fe96f/">
+                <p>Submission 25 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/ca8292f3b0ce465f8a7e710a84d8e536/">
+                <p>Submission 26 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/dcad21b05e804ebe9052733146eab4a8/">
+                <p>Submission 27 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fecd184d3136490e9fb1bdfc0754dd21/3de2de0186a242c89295f802e6f9c900/">
+                <p>Submission 28 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-9-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-9-parent" aria-controls="python-and-software-engineering-best-practices-p-9-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-9)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-9)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-9-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-9) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/935f81f0062e434580a49e7eb51c7474/">
+                <p>Sample Code: Regular Expression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/d7cfd4b0a8614111890e4006d0c6ddac/">
+                <p>Sample Code : Data Scrapping </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/fbe3d21797b040139b15ae22b2541c40/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/c5f0f98e08714c3ba2bed53d8f83bf35/">
+                <p>Optional Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/af4a2e5fe2e5485095117172c2ef25a0/">
+                <p>Submission 29 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/514516e4472d468891c62409551a7de9/">
+                <p>Submission 30 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/5695db2f5c884df29fbb8e6321881a28/">
+                <p>Submission 31 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/933ac562055c4bb1a55458cb3ecb6f8a/5a1bb5516290492b9e2e2517b106ab38/">
+                <p>Submission 32 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#python-and-software-engineering-best-practices-p-10-child" role="button" class="button-chapter chapter " id="python-and-software-engineering-best-practices-p-10-parent" aria-controls="python-and-software-engineering-best-practices-p-10-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Python and Software Engineering Best Practices (P-10)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Python and Software Engineering Best Practices (P-10)
+    </span>
+</a>
+<div class="chapter-content-container" id="python-and-software-engineering-best-practices-p-10-child" tabindex="-1" role="group" aria-label="Python and Software Engineering Best Practices (P-10) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/1d17d45b1c374675a82d72445cbff0df/71e907e27db040baad1f840347103139/">
+                <p>Sample Code: MongoDB </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/1d17d45b1c374675a82d72445cbff0df/987853fb3d6e4648905cce9b74b4606b/">
+                <p>Sample Code: MySQL </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/1d17d45b1c374675a82d72445cbff0df/ed0b4ee431bf42bf8589bfd36401657a/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/1d17d45b1c374675a82d72445cbff0df/7ad61cf5f17d4b82bd90a8dbb334c202/">
+                <p>Submission 33 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/1d17d45b1c374675a82d72445cbff0df/d7e4f207591c4301b6e2cedc7617e7a7/">
+                <p>Submission 34 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#ds-specific-libraries-p-1-child" role="button" class="button-chapter chapter " id="ds-specific-libraries-p-1-parent" aria-controls="ds-specific-libraries-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="DS specific libraries (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        DS specific libraries (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="ds-specific-libraries-p-1-child" tabindex="-1" role="group" aria-label="DS specific libraries (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/a369bc083c8a44d5a941ac517bc59739/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/590241dfa40a4796a1401236a42cccf7/">
+                <p>Sample Code: Pandas </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/0df131037f624de0a05b9307c5260650/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/8c10da4a54834add844e3f71b0101c87/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/2e9404995f3b4d85bcc82873bc60e14a/">
+                <p>Submission 35 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/910888b9945b45aea73e1eb1f157643a/c0a7cd41a49a4da08cf3591734600fce/">
+                <p>Submission 36 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#ds-specific-libraries-p-2-child" role="button" class="button-chapter chapter " id="ds-specific-libraries-p-2-parent" aria-controls="ds-specific-libraries-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="DS specific libraries (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        DS specific libraries (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="ds-specific-libraries-p-2-child" tabindex="-1" role="group" aria-label="DS specific libraries (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/e819e1500fac4fa680a9da8dd2a89920/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/3fc399066d6040769b4eba721702ed41/">
+                <p>Quiz </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Quiz </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/c317c896e6dc437aa8b2d63552eecd4b/">
+                <p>Sample Code: Numpy </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/3306f9fb3e6e49debb682e4527f3384d/">
+                <p>Sample Code: Standard Deviation and Variance </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/d57c5b99ba7c4379a4e603c40cf07d8b/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/0cb9fb7530004509b2b2dbb8ca964c00/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/1ea2a132583941dc9eb6ecec103d4d10/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/71ca3b40511d44fcbca460b159f52578/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/b599bff6277e4e1690e5b788b1026377/">
+                <p>Submission 37 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/9de68873f4d2439dbe82445f69d93c6c/">
+                <p>Submission 38 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/043fc8f958ff4db9a61d7ad197186c0b/">
+                <p>Submission 39 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/0d278f5baf2f4b48800c65087434299c/">
+                <p>Submission 40 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/45e3a76bceb14bbca3d82bf6fea8cf57/ee8686f7875d467c80cb0870992c835b/">
+                <p>Submission 41 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#ds-specific-libraries-p-3-child" role="button" class="button-chapter chapter " id="ds-specific-libraries-p-3-parent" aria-controls="ds-specific-libraries-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="DS specific libraries (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        DS specific libraries (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="ds-specific-libraries-p-3-child" tabindex="-1" role="group" aria-label="DS specific libraries (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/71e336921167456bbad4adc132ee6d8a/081ed10a63ca4bb59dda55742caa461b/">
+                <p>Sample Code: MatPlotLib </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/71e336921167456bbad4adc132ee6d8a/d3c69f355d224173ab01d49b065cf8f7/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/71e336921167456bbad4adc132ee6d8a/e50623dc8af64c77a269f133fed566de/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/71e336921167456bbad4adc132ee6d8a/0d5f19968d9f4a48885899721588c5b0/">
+                <p>Submission 42 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/71e336921167456bbad4adc132ee6d8a/b5ba63ce5cdd4cd699663fb5ab48d238/">
+                <p>Submission 43 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#data-preprocessing-p-1-child" role="button" class="button-chapter chapter " id="data-preprocessing-p-1-parent" aria-controls="data-preprocessing-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Data Preprocessing (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Data Preprocessing (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="data-preprocessing-p-1-child" tabindex="-1" role="group" aria-label="Data Preprocessing (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2a962adda51746ad883eb146081d3a56/ef0fab1f361d4c758485b3d4d8124352/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2a962adda51746ad883eb146081d3a56/2f80f57798f24ff8a9e5d2c7105a29ef/">
+                <p>Sample Code: Splitting Dataset </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2a962adda51746ad883eb146081d3a56/4531e04434c045aba8cae4f620b09568/">
+                <p>Code Challenge (Splitting Data) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2a962adda51746ad883eb146081d3a56/3e8053056341448a84a0e3b51042b6a3/">
+                <p>Submission 44 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#data-preprocessing-p-2-child" role="button" class="button-chapter chapter " id="data-preprocessing-p-2-parent" aria-controls="data-preprocessing-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Data Preprocessing (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Data Preprocessing (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="data-preprocessing-p-2-child" tabindex="-1" role="group" aria-label="Data Preprocessing (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/8ec9fc00625e4014945efe168cf5fedd/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/a097cf37f1554ca3baa064a06b924c1f/">
+                <p>Sample Code: Categorical Data </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/92eefb189e9043378550450b00209301/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/451c030a0ccb4b09a062b16a1f60552a/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/e724ff9a33904bb69860fe287a3c05f6/">
+                <p>Submission 45 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/3bd8c3fa68984b03a144d0ada1b015a8/">
+                <p>Submission 46 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/9150ced86e73495c863ba1b7b610f031/67450e5ec76a449bb5e313c30b0a7dd0/">
+                <p>Submission 47 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#data-preprocessing-p-3-child" role="button" class="button-chapter chapter " id="data-preprocessing-p-3-parent" aria-controls="data-preprocessing-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Data Preprocessing (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Data Preprocessing (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="data-preprocessing-p-3-child" tabindex="-1" role="group" aria-label="Data Preprocessing (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c4d700eb38d24856896e4aa89460d6d7/2c6048116e9b44bbbeafebb711c807ca/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c4d700eb38d24856896e4aa89460d6d7/94449239e63e4a04a381074b1740b7f6/">
+                <p>Sample Code: Feature Scaling </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c4d700eb38d24856896e4aa89460d6d7/759ef42c98f44e5baba760b380ec379f/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c4d700eb38d24856896e4aa89460d6d7/e61dfd6b197b40f1a456583cdf41d43a/">
+                <p>Submission 48 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+        <div class="menu-item  graded">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c4d700eb38d24856896e4aa89460d6d7/7da047fd4b154c0e9b9b3d38bd5b02a3/">
+                <p>Submission 49 </p>
+                
+
+
+                <p class="subtitle">
+                        <span class="subtitle-name">Code Challenge </span>
+
+                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                            <span class="sr">This content is graded</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-regression-p-1-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-regression-p-1-parent" aria-controls="supervised-machine-learning-regression-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Regression (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Regression (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-regression-p-1-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Regression (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/56d83889e95f4834a5ae0861216349a7/0d7794d219ea428daace98534af98763/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/56d83889e95f4834a5ae0861216349a7/f2421e1679f544f48035640513fc0d60/">
+                <p>Sample Code: Simple Linear Regression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/56d83889e95f4834a5ae0861216349a7/6e61903b764c4aa18538ea777fb237c8/">
+                <p>Code Challenge (Simple Linear Regression) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/56d83889e95f4834a5ae0861216349a7/dfd888fa6e0f4233b21a2738951255ab/">
+                <p>Submission 50 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/56d83889e95f4834a5ae0861216349a7/cf74926520174fd2ba920b3057335c22/">
+                <p>Submission 51 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-regression-p-2-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-regression-p-2-parent" aria-controls="supervised-machine-learning-regression-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Regression (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Regression (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-regression-p-2-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Regression (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/98a4294e046b4c25a5dad1976dfe1d48/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/ddd7a02e16a64f53ba7b36d43893e7f9/">
+                <p>Sample Code: Multiple Linear Regression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/9c9627fef21f452ebf9db394428acb9e/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/2a8c48239b144263b8a5db18529430f7/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/d7a137ef186f4a52b1a70ead905f0a5a/">
+                <p>Submission 52 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/c3543bcc53ea4d2690d93d65be691ad4/05112a57530a48739c04d5ac25d30506/">
+                <p>Submission 53 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-regression-p-3-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-regression-p-3-parent" aria-controls="supervised-machine-learning-regression-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Regression (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Regression (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-regression-p-3-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Regression (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/00182c10960940b28766eda984f1fe04/a153d037e7d34256bf6e1a96b828c63e/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/00182c10960940b28766eda984f1fe04/f8e41992d8714d5ebee381cc378babad/">
+                <p>Sample Code: Polynomial Regression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/00182c10960940b28766eda984f1fe04/22debde4f986464b9f60565ece823403/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/00182c10960940b28766eda984f1fe04/76af2f75a17641628da71b89fa842179/">
+                <p>Submission 54 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-regression-p-4-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-regression-p-4-parent" aria-controls="supervised-machine-learning-regression-p-4-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Regression (P-4)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Regression (P-4)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-regression-p-4-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Regression (P-4) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/6d338cbda9ef4b139ef2a3070d43770b/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/30f2d4e24b2342d3a5f6bb574409538b/">
+                <p>Sample Code: Decision Tree Regression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/ea4f389f798c42a5939375a575297bd4/">
+                <p>Sample Code: Random Forest Regression </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/05f9bb3caa5b4e18ade4654308f208c1/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/b6ca87f784654da797714ebe2767e518/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/7342015cd9af45f3b812d8774d3e05da/">
+                <p>Submission 55 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6acfa03538b84230a4fbbf34ab953407/604420452ff54aa3bb1f102adb926cd5/">
+                <p>Submission 56 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-classification-p-1-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-classification-p-1-parent" aria-controls="supervised-machine-learning-classification-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Classification (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Classification (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-classification-p-1-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Classification (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/cb8d49a539b640a68d2efe62e5be75e0/a523cdc57be74015adfbd3be9170b6e2/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/cb8d49a539b640a68d2efe62e5be75e0/83e752afa1c8417192ecf181babd6aa2/">
+                <p>Sample Code (Logistic Regression) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/cb8d49a539b640a68d2efe62e5be75e0/f738e5d19fd44688b3c694a2b48daea8/">
+                <p>Sample Code 2 (Logistic Regression) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/cb8d49a539b640a68d2efe62e5be75e0/9e5d527437eb464c9c73743f85b9fa2a/">
+                <p>Code Challenge (Logistic Regression) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/cb8d49a539b640a68d2efe62e5be75e0/634e7128ba3c4ece89e60714cd3496f6/">
+                <p>Submission 57 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-classification-p-2-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-classification-p-2-parent" aria-controls="supervised-machine-learning-classification-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Classification (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Classification (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-classification-p-2-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Classification (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6a0a93aff14445d184b1cdf7552221e7/c5a9cd0e125c4c9581e7e56817a5e14d/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6a0a93aff14445d184b1cdf7552221e7/34ccde0919e646878e5b11a0d860ef0d/">
+                <p>Sample Code (K-NN) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6a0a93aff14445d184b1cdf7552221e7/8a41f7493e294e9b80153d862e0eb9e4/">
+                <p>Code Challenge (K-NN) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/6a0a93aff14445d184b1cdf7552221e7/d8d78f9470114b788882d8f7120a05a5/">
+                <p>Submission 58 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-classification-p-3-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-classification-p-3-parent" aria-controls="supervised-machine-learning-classification-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Classification (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Classification (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-classification-p-3-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Classification (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/851b77fbab45490f82becd945f20cc61/8512db789a1b4fa2b4c7c71ffeb11bd4/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/851b77fbab45490f82becd945f20cc61/74b670e2f2074a7bba42a33553b12cff/">
+                <p>Sample Code: Decision Tree Classification </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/851b77fbab45490f82becd945f20cc61/4f8ead9b97d54876b14f0722911d3eee/">
+                <p>Sample Code: Random Forest Classification </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/851b77fbab45490f82becd945f20cc61/8bbc377538f54bb88f898d2e33a1e396/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/851b77fbab45490f82becd945f20cc61/8516c9e69f674dd0b5115889f32f2413/">
+                <p>Submission 59 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#unsupervised-machine-learning-p-1-child" role="button" class="button-chapter chapter " id="unsupervised-machine-learning-p-1-parent" aria-controls="unsupervised-machine-learning-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Unsupervised Machine Learning (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Unsupervised Machine Learning (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="unsupervised-machine-learning-p-1-child" tabindex="-1" role="group" aria-label="Unsupervised Machine Learning (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/3049315f790845c382ba8e8dced3c602/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/4d4961f8bc854f61b28234e8baa24419/">
+                <p>Sample Code: K-Means (Clustering) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/2b134addbe574b8793e716e839e8f3c8/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/3501ccf7e61d4953b7280d68dbb46a0d/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/32cfd10c17de4c5a84b00bfb8ca42cc1/">
+                <p>Submission 60 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/2b13656597014f779ee623f391a86993/bbb42dc9b22b45e1be76c1fb578f3457/">
+                <p>Submission 61 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#unsupervised-machine-learning-p-2-child" role="button" class="button-chapter chapter " id="unsupervised-machine-learning-p-2-parent" aria-controls="unsupervised-machine-learning-p-2-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Unsupervised Machine Learning (P-2)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Unsupervised Machine Learning (P-2)
+    </span>
+</a>
+<div class="chapter-content-container" id="unsupervised-machine-learning-p-2-child" tabindex="-1" role="group" aria-label="Unsupervised Machine Learning (P-2) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fa90b74b326b4ddca65132af8f0967da/9a984f414b8e48e9b9bd27ca0517fc6f/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fa90b74b326b4ddca65132af8f0967da/97182e7002d845f2a3ad7f5616aa1cbf/">
+                <p>Sample Code: Apriori </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fa90b74b326b4ddca65132af8f0967da/305687d3a640475796ac7db777f68852/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/fa90b74b326b4ddca65132af8f0967da/6dc538f0151d4243b29bc06ea6d39f55/">
+                <p>Submission 62 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#unsupervised-machine-learning-p-3-child" role="button" class="button-chapter chapter " id="unsupervised-machine-learning-p-3-parent" aria-controls="unsupervised-machine-learning-p-3-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Unsupervised Machine Learning (P-3)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Unsupervised Machine Learning (P-3)
+    </span>
+</a>
+<div class="chapter-content-container" id="unsupervised-machine-learning-p-3-child" tabindex="-1" role="group" aria-label="Unsupervised Machine Learning (P-3) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/ccebdec81e984d7ba5493de63bb9ce55/39c0bc63f33d4f048631da641fd72974/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/ccebdec81e984d7ba5493de63bb9ce55/114fbd026fbc4156bcdeb09e41497ea6/">
+                <p>Sample Code: PCA </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/ccebdec81e984d7ba5493de63bb9ce55/70f61a50f732403a82c1e22c203e90f5/">
+                <p>Code Challenge: PCA </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/ccebdec81e984d7ba5493de63bb9ce55/de9aad0aa7bf4af3b04584fc7be0b486/">
+                <p>Submission 63 </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/ccebdec81e984d7ba5493de63bb9ce55/196ad07e8eb14690bcef9cca3f80e9bf/">
+                <p>Submission 64 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-classification-p-5-child" role="button" class="button-chapter chapter active" id="supervised-machine-learning-classification-p-5-parent" aria-controls="supervised-machine-learning-classification-p-5-child" aria-expanded="false">
+    <span class="group-heading active" aria-label="Supervised Machine Learning - Classification (P-5) current chapter">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Classification (P-5)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-classification-p-5-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Classification (P-5) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/3eb599e896d1431e92262dbecc7e4768/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item active ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/08a78b79c4614acab96a833fb08dfeb2/">
+                <p>Sample Code: SVM (Support Vector Machines) <span class="sr">current section</span></p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/9e4112bc0eba4cfa9f0cc0afdfc667b4/">
+                <p>Sample Code: Kernel SVM </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/53a2b4e067a74295ada083ea3de8704c/">
+                <p>Code Challenge </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/8aa8bec5d8d3422f9306ddefe85f5097/">
+                <p>Submission 65 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#supervised-machine-learning-classification-p-4-child" role="button" class="button-chapter chapter " id="supervised-machine-learning-classification-p-4-parent" aria-controls="supervised-machine-learning-classification-p-4-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Supervised Machine Learning - Classification (P-4)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Supervised Machine Learning - Classification (P-4)
+    </span>
+</a>
+<div class="chapter-content-container" id="supervised-machine-learning-classification-p-4-child" tabindex="-1" role="group" aria-label="Supervised Machine Learning - Classification (P-4) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/06e16636ef8c433095605b0c8d10a806/2911bf002dd44d348fef35c75e4aa4b8/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/06e16636ef8c433095605b0c8d10a806/9185de46c0ea4d1bbd8a0dc48966d08f/">
+                <p>Sample Code: k-Fold Cross Validation </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/06e16636ef8c433095605b0c8d10a806/eb2aae71df824dccab58eed7b1d52c9e/">
+                <p>Code Challenge (k-Fold) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/06e16636ef8c433095605b0c8d10a806/84404504dc7d45a8b908492d1a281abf/">
+                <p>Submission 66 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#natural-language-processing-p-1-child" role="button" class="button-chapter chapter " id="natural-language-processing-p-1-parent" aria-controls="natural-language-processing-p-1-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Natural Language Processing (P-1)">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Natural Language Processing (P-1)
+    </span>
+</a>
+<div class="chapter-content-container" id="natural-language-processing-p-1-child" tabindex="-1" role="group" aria-label="Natural Language Processing (P-1) submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/5a6bf52cae654a39b70f8a8823bb661e/54928e6ed7a94be59080823a1d5cef42/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/5a6bf52cae654a39b70f8a8823bb661e/037124d9358d464cbf70fd65fa093d41/">
+                <p>Sample Code: NLP (Natural Language Processing) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/5a6bf52cae654a39b70f8a8823bb661e/6f29054a594e4a2cbd14d90cfe2dde87/">
+                <p>Code Challenge NLP (Movie Review) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/5a6bf52cae654a39b70f8a8823bb661e/70122021dc6b4736b0bced5a6d8bca43/">
+                <p>Submission 67 </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#open-cv-child" role="button" class="button-chapter chapter " id="open-cv-parent" aria-controls="open-cv-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Open CV">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Open CV
+    </span>
+</a>
+<div class="chapter-content-container" id="open-cv-child" tabindex="-1" role="group" aria-label="Open CV submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/bd0d3cfce9434521bb542af5ac0eb2b6/3025e29f469e493088d65a5e3f8c56ef/">
+                <p>Resources </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/bd0d3cfce9434521bb542af5ac0eb2b6/9817cbb35f0448bf829c0e4a28a62457/">
+                <p>Face and Eyes Detection (on saved Image) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/bd0d3cfce9434521bb542af5ac0eb2b6/dd9890ad814d4010b4b047f2e8a0060d/">
+                <p>Face and Eyes Detection (Live) </p>
+                
+
+
+            </a>
+        </div>
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/bd0d3cfce9434521bb542af5ac0eb2b6/acc195d81c6f4a1da4676c102e844b5d/">
+                <p>Color Detection (Red, Blue, Green) </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+    
+
+<a href="#number-plate-recognition-child" role="button" class="button-chapter chapter " id="number-plate-recognition-parent" aria-controls="number-plate-recognition-child" aria-expanded="false">
+    <span class="group-heading " aria-label="Number Plate Recognition">
+        <span class="icon fa fa-caret-right" aria-hidden="true"></span>
+        Number Plate Recognition
+    </span>
+</a>
+<div class="chapter-content-container" id="number-plate-recognition-child" tabindex="-1" role="group" aria-label="Number Plate Recognition submenu">
+    <div class="chapter-menu">
+        <div class="menu-item  ">
+            <a href="/courses/Forsk_Labs/ST101/2018_19/courseware/b8968055e2604166855d50771fc3603f/ee7ed54db32446b7ab6333dedb563549/">
+                <p>HPE-Car License Plate Recognition </p>
+                
+
+
+            </a>
+        </div>
+    </div>
+</div>
+
+
+        </nav>
+      </div>
+
+    </div>
+    <section class="course-content" id="course-content" role="main" aria-label="Content">
+
+      <div class="xblock xblock-student_view xblock-student_view-sequential xmodule_display xmodule_SequenceModule" data-runtime-class="LmsRuntime" data-init="XBlockToXModuleShim" data-block-type="sequential" data-request-token="e954cf4e749011e8b3b8022555df1603" data-runtime-version="1" data-usage-id="i4x:;_;_Forsk_Labs;_ST101;_sequential;_08a78b79c4614acab96a833fb08dfeb2" data-type="Sequence" data-course-id="Forsk_Labs/ST101/2018_19">
+  <script type="json/xblock-args" class="xblock-json-init-args">
+    {"xmodule-type": "Sequence"}
+  </script>
+  
+
+
+<div id="sequence_i4x-Forsk_Labs-ST101-sequential-08a78b79c4614acab96a833fb08dfeb2" class="sequence" data-id="i4x://Forsk_Labs/ST101/sequential/08a78b79c4614acab96a833fb08dfeb2" data-position="1" data-ajax-url="/courses/Forsk_Labs/ST101/2018_19/xblock/i4x:;_;_Forsk_Labs;_ST101;_sequential;_08a78b79c4614acab96a833fb08dfeb2/handler/xmodule_handler" data-next-url="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/9e4112bc0eba4cfa9f0cc0afdfc667b4/?activate_block_id=i4x%3A%2F%2FForsk_Labs%2FST101%2Fsequential%2F9e4112bc0eba4cfa9f0cc0afdfc667b4&amp;child=first" data-prev-url="/courses/Forsk_Labs/ST101/2018_19/courseware/76c5eec2197a4c3385ab70d5992eecd8/3eb599e896d1431e92262dbecc7e4768/?activate_block_id=i4x%3A%2F%2FForsk_Labs%2FST101%2Fsequential%2F3eb599e896d1431e92262dbecc7e4768&amp;child=last">
+  <div class="path"></div>
+  <div class="sequence-nav">
+    <button class="sequence-nav-button button-previous">
+        <span class="icon fa fa-chevron-prev" aria-hidden="true"></span><span class="sr">Previous</span>
+    </button>
+    <nav class="sequence-list-wrapper" aria-label="Unit">
+      <ol id="sequence-list">
+        <li>
+        <button class="seq_other inactive progress-0 nav-item"
+           data-id="i4x://Forsk_Labs/ST101/vertical/2a9e44f8ffce466ab98ab02cce10e861"
+           data-element="1"
+           data-page-title="Sample Code SVM (Support Vector Machines)"
+           data-path="Supervised Machine Learning - Classification (P-5) &gt; Sample Code: SVM (Support Vector Machines) &gt; Sample Code SVM (Support Vector Machines)"
+           id="tab_0">
+            <i class="icon fa seq_other" aria-hidden="true"></i>
+            <i class="fa fa-fw fa-bookmark bookmark-icon is-hidden" aria-hidden="true"></i>
+            <div class="sequence-tooltip sr"><span class="sr">other&nbsp;</span>Sample Code SVM (Support Vector Machines)<span class="sr bookmark-icon-sr">&nbsp;</span></div>
+          </button>
+        </li>
+      </ol>
+    </nav>
+    <button class="sequence-nav-button button-next">
+        <span class="icon fa fa-chevron-next" aria-hidden="true"></span><span class="sr">Next</span>
+    </button>
+  </div>
+
+  <div class="sr-is-focusable" tabindex="-1"></div>
+
+  <div id="seq_contents_0"
+    aria-labelledby="tab_0"
+    aria-hidden="true"
+    class="seq_contents tex2jax_ignore asciimath2jax_ignore">
+    &lt;div class=&#34;xblock xblock-student_view xblock-student_view-vertical&#34; data-runtime-class=&#34;LmsRuntime&#34; data-init=&#34;VerticalStudentView&#34; data-course-id=&#34;Forsk_Labs/ST101/2018_19&#34; data-request-token=&#34;e954cf4e749011e8b3b8022555df1603&#34; data-runtime-version=&#34;1&#34; data-usage-id=&#34;i4x:;_;_Forsk_Labs;_ST101;_vertical;_2a9e44f8ffce466ab98ab02cce10e861&#34; data-block-type=&#34;vertical&#34;&gt;
+  
+
+    
+
+
+&lt;div class=&#34;bookmark-button-wrapper&#34;&gt;
+  &lt;button class=&#34;btn bookmark-button &#34;
+    aria-pressed=&#34;false&#34;
+    data-bookmark-id=&#34;karan_raj_singh,i4x://Forsk_Labs/ST101/vertical/2a9e44f8ffce466ab98ab02cce10e861&#34;&gt;
+     &lt;span class=&#34;sr bookmark-sr&#34;&gt;Click to add&lt;/span&gt;&amp;nbsp;
+     Bookmark
+    &lt;/button&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;vert-mod&#34;&gt;
+  &lt;div class=&#34;vert vert-0&#34; data-id=&#34;i4x://Forsk_Labs/ST101/html/0fa8d5cc1f8f4e47941b78f992ae5613&#34;&gt;
+    &lt;div class=&#34;xblock xblock-student_view xblock-student_view-html xmodule_display xmodule_HtmlModule&#34; data-runtime-class=&#34;LmsRuntime&#34; data-init=&#34;XBlockToXModuleShim&#34; data-block-type=&#34;html&#34; data-request-token=&#34;e954cf4e749011e8b3b8022555df1603&#34; data-runtime-version=&#34;1&#34; data-usage-id=&#34;i4x:;_;_Forsk_Labs;_ST101;_html;_0fa8d5cc1f8f4e47941b78f992ae5613&#34; data-type=&#34;HTMLModule&#34; data-course-id=&#34;Forsk_Labs/ST101/2018_19&#34;&gt;
+  &lt;script type=&#34;json/xblock-args&#34; class=&#34;xblock-json-init-args&#34;&gt;
+    {&#34;xmodule-type&#34;: &#34;HTMLModule&#34;}
+  &lt;/script&gt;
+  &lt;p style=&#34;text-align: center;&#34;&gt;&lt;span style=&#34;color: #000000; font-size: 22.0pt;&#34;&gt;&lt;strong&gt;SVM (Support Vector Machine)&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;div style=&#34;overflow: auto; height: 500px;&#34;&gt;
+&lt;div style=&#34;width: max-content;&#34;&gt;
+&lt;pre style=&#34;background: #0c1021; color: #f8f8f8; padding: 15px; width: -moz-max-content;&#34;&gt;&lt;span style=&#34;color: #aeaeae;&#34;&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
+&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#34;&#34;&#34;
+Created on Sat May 12 13:09:54 2018
+
+@author: Kunal Vaid
+&#34;&#34;&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Support Vector Machine (SVM)&lt;/span&gt;
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Importing the libraries&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color: #fbde2d;&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color: #fbde2d;&#34;&gt;as&lt;/span&gt; pd
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color: #fbde2d;&#34;&gt;as&lt;/span&gt; plt
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Importing the dataset&lt;/span&gt;
+dataset &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; pd.read_csv(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;Social_Network_Ads.csv&#39;&lt;/span&gt;)
+features &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; dataset.iloc[:, [&lt;span style=&#34;color: #d8fa3c;&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;3&lt;/span&gt;]].values
+labels &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; dataset.iloc[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;4&lt;/span&gt;].values
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Splitting the dataset into the Training set and Test set&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; sklearn.model_selection &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; train_test_split
+features_train, features_test, labels_train, labels_test &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; train_test_split(features, labels, test_size &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.25&lt;/span&gt;, random_state &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Feature Scaling&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; sklearn.preprocessing &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; StandardScaler
+sc &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; StandardScaler()
+features_train &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; sc.fit_transform(features_train)
+features_test &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; sc.transform(features_test)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Fitting SVM to the Training set&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; sklearn.svm &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; SVC
+classifier &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; SVC(kernel &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;linear&#39;&lt;/span&gt;, random_state &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;)
+classifier.fit(features_train, labels_train)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Predicting the Test set results&lt;/span&gt;
+labels_pred &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; classifier.predict(features_test)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Making the Confusion Matrix&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; sklearn.metrics &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; confusion_matrix
+cm &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; confusion_matrix(labels_test, labels_pred)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Model Score&lt;/span&gt;
+score &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; classifier.score(features_test,labels_test)
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Visualising the Training set results&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; matplotlib.colors &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; ListedColormap
+features_set, labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_train, labels_train
+X1, X2 &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; np.meshgrid(np.arange(start &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;].min() &lt;span style=&#34;color: #fbde2d;&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, stop &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;].max() &lt;span style=&#34;color: #fbde2d;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, step &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.01&lt;/span&gt;),
+                     np.arange(start &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;].min() &lt;span style=&#34;color: #fbde2d;&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, stop &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;].max() &lt;span style=&#34;color: #fbde2d;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, step &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.01&lt;/span&gt;))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.75&lt;/span&gt;, cmap &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; ListedColormap((&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;red&#39;&lt;/span&gt;, &lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;green&#39;&lt;/span&gt;)))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;for&lt;/span&gt; i, j &lt;span style=&#34;color: #fbde2d;&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #8da6ce;&#34;&gt;enumerate&lt;/span&gt;(np.unique(labels_set)):
+    plt.scatter(features_set[labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;==&lt;/span&gt; j, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;], features_set[labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;==&lt;/span&gt; j, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;],
+                c &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; ListedColormap((&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;red&#39;&lt;/span&gt;, &lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;green&#39;&lt;/span&gt;))(i), label &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; j)
+plt.title(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;SVM (Training set)&#39;&lt;/span&gt;)
+plt.xlabel(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;Age&#39;&lt;/span&gt;)
+plt.ylabel(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;Estimated Salary&#39;&lt;/span&gt;)
+plt.legend()
+plt.show()
+
+&lt;span style=&#34;color: #aeaeae;&#34;&gt;# Visualising the Test set results&lt;/span&gt;
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;from&lt;/span&gt; matplotlib.colors &lt;span style=&#34;color: #fbde2d;&#34;&gt;import&lt;/span&gt; ListedColormap
+features_set, labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_test, labels_test
+X1, X2 &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; np.meshgrid(np.arange(start &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;].min() &lt;span style=&#34;color: #fbde2d;&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, stop &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;].max() &lt;span style=&#34;color: #fbde2d;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, step &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.01&lt;/span&gt;),
+                     np.arange(start &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;].min() &lt;span style=&#34;color: #fbde2d;&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, stop &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; features_set[:, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;].max() &lt;span style=&#34;color: #fbde2d;&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;, step &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.01&lt;/span&gt;))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0.75&lt;/span&gt;, cmap &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; ListedColormap((&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;red&#39;&lt;/span&gt;, &lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;green&#39;&lt;/span&gt;)))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+&lt;span style=&#34;color: #fbde2d;&#34;&gt;for&lt;/span&gt; i, j &lt;span style=&#34;color: #fbde2d;&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #8da6ce;&#34;&gt;enumerate&lt;/span&gt;(np.unique(labels_set)):
+    plt.scatter(features_set[labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;==&lt;/span&gt; j, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;0&lt;/span&gt;], features_set[labels_set &lt;span style=&#34;color: #fbde2d;&#34;&gt;==&lt;/span&gt; j, &lt;span style=&#34;color: #d8fa3c;&#34;&gt;1&lt;/span&gt;],
+                c &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; ListedColormap((&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;red&#39;&lt;/span&gt;, &lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;green&#39;&lt;/span&gt;))(i), label &lt;span style=&#34;color: #fbde2d;&#34;&gt;=&lt;/span&gt; j)
+plt.title(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;SVM (Test set)&#39;&lt;/span&gt;)
+plt.xlabel(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;Age&#39;&lt;/span&gt;)
+plt.ylabel(&lt;span style=&#34;color: #61ce3c;&#34;&gt;&#39;Estimated Salary&#39;&lt;/span&gt;)
+plt.legend()
+plt.show()
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+  </div>
+  <div id="seq_content"></div>
+
+  <nav class="sequence-bottom" aria-label="Section">
+    <button class="sequence-nav-button button-previous">
+        <span class="icon fa fa-chevron-prev" aria-hidden="true"></span><span class="sr">Previous</span>
+    </button>
+    <button class="sequence-nav-button button-next">
+        <span class="icon fa fa-chevron-next" aria-hidden="true"></span><span class="sr">Next</span>
+    </button>
+  </nav>
+</div>
+
+<script type="text/javascript">
+  var sequenceNav;
+  $(document).ready(function() {
+    sequenceNav = new SequenceNav($('.sequence-nav'));
+  });
+</script>
+
+</div>
+
+    </section>
+
+    <section class="courseware-results-wrapper">
+      <div id="loading-message" aria-live="polite" aria-relevant="all"></div>
+      <div id="error-message" aria-live="polite"></div>
+      <div class="courseware-results search-results" data-course-id="Forsk_Labs/ST101/2018_19" data-lang-code="en"></div>
+    </section>
+
+  </div>
+</div>
+<div class="container-footer">
+</div>
+
+<nav class="nav-utilities " aria-label="Course Utilities">
+
+</nav>
+
+
+<div id="accessibile-confirm-modal" class="modal" aria-hidden="true">
+  <div class="inner-wrapper" role="dialog" aria-labelledby="accessibile-confirm-title">
+    <button class="close-modal">
+      <i class="icon fa fa-remove"></i>
+      <span class="sr">
+        Close
+      </span>
+    </button>
+
+    <header>
+      <h2 id="accessibile-confirm-title">
+          Confirm
+        <span class="sr">,
+          modal open
+        </span>
+      </h2>
+    </header>
+    <div role="alertdialog" class="status message" tabindex="-1">
+        <p class="message-title"></p>
+    </div>
+    <hr aria-hidden="true" />
+    <div class="actions">
+        <button class="dismiss ok-button">OK</button>
+        <button class="dismiss cancel-button" data-dismiss="leanModal">Cancel</button>
+    </div>
+  </div>
+  <a href="#accessibile-confirm-modal" rel="leanModal" id="confirm_open_button" style="display:none">open</a>
+</div>
+
+<script type="text/javascript">
+var accessible_confirm = function(message, callback) {
+    $("#accessibile-confirm-modal .cancel-button").click(function(){
+        $("#accessibile-confirm-modal .close-modal").click();
+    });
+    $("#accessibile-confirm-modal .ok-button").click(function(){
+        $("#accessibile-confirm-modal .close-modal").click();
+        callback();
+    });
+
+    accessible_modal("#accessibile-confirm-modal #confirm_open_button", "#accessibile-confirm-modal .close-modal", "#accessibile-confirm-modal", ".content-wrapper");
+    $("#accessibile-confirm-modal #confirm_open_button").click();
+    $("#accessibile-confirm-modal .message-title").html(message);
+};
+</script>
+
+
+      
+    </div>
+
+        
+
+
+
+
+
+
+
+
+<div class="wrapper wrapper-footer">
+  <footer id="footer-openedx"
+  >
+    <div class="colophon">
+       <nav class="nav-colophon">
+        <ol>
+          <li><a href="http://forsk.in/mission.php" target="_blank">About</a></li>
+          <li><a href="http://forsk.in/blog/" target="_blank">Blog</a></li>
+          <li><a href="http://forsk.in/team-and-mentors.php" target="_blank">Contact</a></li>
+          <li><a href="http://forsk.in" target="_blank">Donate</a></li>
+        </ol>
+      </nav>
+
+      <div class="wrapper-logo">
+        <p>
+          <a href="/">
+            <img alt="organization logo" src="/static/images/logo.b6c374d66d57.png">
+          </a>
+        </p>
+      </div>
+
+      <p class="copyright">© Forsk Labs.  All rights reserved except where noted.  EdX, Open edX and the edX and Open EdX logos are registered trademarks or trademarks of edX Inc.</p>
+
+      <nav class="nav-legal" aria-label="Legal">
+        <ul>
+            <li class="nav-legal-01">
+              <a href="/privacy">Privacy Policy</a>
+            </li>
+            <li class="nav-legal-02">
+              <a href="/tos">Terms of Service</a>
+            </li>
+            <li class="nav-legal-03">
+              <a href="/honor">Honor Code</a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer-about-openedx">
+      <p>
+        <a href="http://open.edx.org">
+          <img src="https://files.edx.org/openedx-logos/edx-openedx-logo-tag.png" alt="Powered by Open edX" width="140" />
+        </a>
+      </p>
+       <div class="social_share">
+      <a href="http://twitter.com/intent/tweet?text=http://openedx.forsk.in" class="share">
+        <i class="icon fa fa-twitter share_fon_t"></i><span class="sr">Tweet that you've enrolled in this course</span>
+      </a>
+      <a href="http://www.facebook.com/forsklabs" class="share">
+        <i class="icon fa fa-thumbs-up share_fon"></i><span class="sr">Post a Facebook message to say you've enrolled in this course</span>
+      </a>
+     </div>
+    </div>
+  </footer>
+</div>
+
+
+
+  </div>
+
+  
+  <script type="text/javascript" src="/static/js/vendor/jquery.scrollTo-1.4.2-min.4aa3e2dfa312.js"></script>
+  <script type="text/javascript" src="/static/js/vendor/flot/jquery.flot.d3d45ff0c6a8.js"></script>
+
+  <script type="text/javascript" src="/static/js/vendor/codemirror-compressed.dd4b74f7c5fe.js"></script>
+
+  
+    <script type="text/javascript" src="/static/js/lms-courseware.94e582ddac20.js" charset="utf-8"></script>
+
+
+  
+    <script type="text/javascript" src="/static/js/discussion.8cb1a8ba45b6.js" charset="utf-8"></script>
+
+
+
+  
+    <script type="text/javascript">
+        (function (require) {
+                require(['/static/js/bookmarks/bookmarks_factory.115f87d0dc9d.js?raw'], function () {
+                    require(['js/bookmarks/bookmarks_factory'], function (BookmarksFactory) {
+                        
+    BookmarksFactory();
+  
+                    });
+                });
+        }).call(this, require || RequireJS.require);
+    </script>
+
+
+  
+
+
+
+
+
+<script type="text/javascript">
+    // Fast Preview was introduced in 2.5. However, it
+    // causes undesirable flashing/font size changes when
+    // MathJax is used for interactive preview (equation editor).
+    // Setting processSectionDelay to 0 (see below) fully eliminates
+    // fast preview, but to reduce confusion, we are also setting
+    // the option as displayed in the context menu to false.
+    // When upgrading to 2.6, check if this variable name changed.
+    window.MathJax = {
+      menuSettings: {CHTMLpreview: false}
+    };
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [
+        ["\\(","\\)"],
+        ['[mathjaxinline]','[/mathjaxinline]']
+      ],
+      displayMath: [
+        ["\\[","\\]"],
+        ['[mathjax]','[/mathjax]']
+      ]
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+
+  // In order to eliminate all flashing during interactive
+  // preview, it is necessary to set processSectionDelay to 0
+  // (remove delay between input and output phases). This
+  // effectively disables fast preview, regardless of
+  // the fast preview setting as shown in the context menu.
+  MathJax.Hub.processSectionDelay = 0;
+
+  MathJax.Hub.signal.Interest(function(message) {
+    if(message[0] === "End Math") {
+        set_mathjax_display_div_settings();
+    }
+  });
+  function set_mathjax_display_div_settings() {
+    $('.MathJax_Display').each(function( index ) {
+      this.setAttribute('tabindex', '0');
+      this.setAttribute('aria-live', 'off');
+      this.removeAttribute('role');
+      this.removeAttribute('aria-readonly');
+    });
+  }
+</script>
+
+
+<!-- This must appear after all mathjax-config blocks, so it is after the imports from the other templates.
+     It can't be run through static.url because MathJax uses crazy url introspection to do lazy loading of
+     MathJax extension libraries -->
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-MML-AM_SVG"></script>
+
+
+
+  <script type="text/javascript">
+    var $$course_id = "Forsk_Labs/ST101/2018_19";
+
+    $(function(){
+        $(".ui-accordion-header a, .ui-accordion-content .subtitle-name").each(function() {
+          var elemText = $(this).text().replace(/^\s+|\s+$/g,''); // Strip leading and trailing whitespace
+          var wordArray = elemText.split(" ");
+          var finalTitle = "";
+          if (wordArray.length > 0) {
+            for (i=0;i<=wordArray.length-1;i++) {
+              finalTitle += wordArray[i];
+              if (i == (wordArray.length-2)) {
+                finalTitle += "&nbsp;";
+              } else if (i == (wordArray.length-1)) {
+                // Do nothing
+              } else {
+                finalTitle += " ";
+              }
+            }
+          }
+          $(this).html(finalTitle);
+        });
+      });
+  </script>
+
+<script src='//ec2-13-232-43-212.ap-south-1.compute.amazonaws.com/xblock/resource/vertical/public/js/vertical_student_view.js' type='application/javascript'></script>
+
+
+  
+
+
+
+  <script type="text/javascript" src="/static/js/vendor/noreferrer.aa62a3e70ffa.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/utils/navigation.17df676f9045.js" charset="utf-8"></script>
+  
+</body>
+</html>
+
+
+
+<!-- Performance beacon for onload times -->
